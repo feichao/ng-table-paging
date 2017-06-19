@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html ng-app="MyApp">
+
+<head>
+  <meta charset="UTF-8">
+  <title>ngTablePaging</title>
+  <link rel="stylesheet" href="../bower_components/angular-material/angular-material.css">
+  <style>
+    body {
+      margin: 12px 16px;
+    }
+    table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+    th, td {
+      border: 1px solid #e0e0e0;
+      padding: 6px 8px;
+      text-align: center;
+    }
+    .mgt {
+      margin-top: 20px;
+    }
+    .mgb {
+      margin-bottom: 20px;
+    }
+    .mgl {
+      margin-left: 20px;
+    }
+    .mgr {
+      margin-right: 20px;
+    }
+  </style>
+</head>
+
+<body>
+  <div ng-controller="MyController">
+    <h2>tpType="load_more"</h2>
+    <table-paging tp-model="users" tp-paging-model="filterUsers1" tp-type="load_more" tp-pagesize="{{ pagesize }}">
+      <table class="mgb">
+        <thead>
+          <tr>
+            <th>name</th>
+            <th>email</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- 此处要使用 filterUsers -->
+          <tr ng-repeat="user in filterUsers1">
+            <td>{{user.name}}</td>
+            <td>{{user.email}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </table-paging>
+
+    <h2 class="mgt">tpType="load_pre_next"</h2>
+    <table-paging tp-model="users" tp-paging-model="filterUsers2" tp-type="load_pre_next" tp-pagesize="{{ pagesize }}">
+      <table class="mgb">
+        <thead>
+          <tr>
+            <th>name</th>
+            <th>email</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- 此处要使用 filterUsers -->
+          <tr ng-repeat="user in filterUsers2">
+            <td>{{user.name}}</td>
+            <td>{{user.email}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </table-paging>
+
+    <h2 class="mgt">tpType="load_paging"</h2>
+    <table-paging tp-model="users" tp-paging-model="filterUsers3" tp-type="load_paging" tp-pagesize="{{ pagesize }}">
+      <table class="mgb">
+        <thead>
+          <tr>
+            <th>name</th>
+            <th>email</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- 此处要使用 filterUsers -->
+          <tr ng-repeat="user in filterUsers3">
+            <td>{{user.name}}</td>
+            <td>{{user.email}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </table-paging>
+    <hr class="mgt mgb">
+    <h2 class="mgt">tpType="load_paging" && tp-async="fun" && tp-total exists</h2>
+    <table-paging tp-model="usersAsync" tp-total="usersTotal" tp-paging-model="filterUsers4" tp-type="load_paging" 
+      tp-pagesize="{{ pagesize }}" tp-async="getMoreUsers(currentPage)">
+      <table class="mgb">
+        <thead>
+          <tr>
+            <th>name</th>
+            <th>email</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- 此处要使用 filterUsers -->
+          <tr ng-repeat="user in filterUsers4">
+            <td>{{user.name}}</td>
+            <td>{{user.email}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </table-paging>
+    <h2 class="mgt">tpType="load_more" && tp-async="fun" && tp-total not exists</h2>
+    <table-paging tp-model="usersAsync" tp-paging-model="filterUsers5" tp-type="load_more" 
+      tp-pagesize="{{ pagesize }}" tp-async="getMoreUsers(currentPage)">
+      <table class="mgb">
+        <thead>
+          <tr>
+            <th>name</th>
+            <th>email</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- 此处要使用 filterUsers -->
+          <tr ng-repeat="user in filterUsers5">
+            <td>{{user.name}}</td>
+            <td>{{user.email}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </table-paging>
+    <h2 class="mgt">tpType="load_pre_next" && tp-async="fun" && tp-total not exists</h2>
+    <table-paging tp-model="usersAsync" tp-paging-model="filterUsers6" tp-type="load_pre_next" 
+      tp-pagesize="{{ pagesize }}" tp-async="getMoreUsers(currentPage)">
+      <table class="mgb">
+        <thead>
+          <tr>
+            <th>name</th>
+            <th>email</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- 此处要使用 filterUsers -->
+          <tr ng-repeat="user in filterUsers6">
+            <td>{{user.name}}</td>
+            <td>{{user.email}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </table-paging>
+  </div>
+  <script src="../bower_components/angular/angular.js"></script>
+  <script src="../bower_components/angular-animate/angular-animate.js"></script>
+  <script src="../bower_components/angular-aria/angular-aria.js"></script>
+  <script src="../bower_components/angular-material/angular-material.js"></script>
+  <script src="../bower_components/angular-material-paging/src/angular-material-paging.js"></script>
+  <script src="../src/table-paging.js"></script>
+  <script>
+    angular
+      .module('MyApp', [
+        'ngMaterial',
+        'ngTablePaging'
+      ]).controller('MyController', MyController);
+
+    function MyController($scope, $timeout) {
+      $scope.pagesize = 5;
+      $scope.users = [];
+      for(var i = 0; i < 100; i++) {
+        $scope.users.push({
+          id: i,
+          name: 'frank' + i,
+          email: 'frank' + i + '@xx.cn'
+        });
+      }
+
+      $scope.usersAsync = [];
+      $scope.usersTotal;
+      $scope.getMoreUsers = function(currentPage) {
+        if(currentPage > $scope.usersTotal / $scope.pagesize) {
+          return;
+        }
+
+        $timeout(function() {
+          $scope.usersAsync = [];
+          for(var j = (currentPage - 1) * $scope.pagesize; j < currentPage * $scope.pagesize; j++) {
+            $scope.usersAsync.push({
+              id: j,
+              name: 'frank-async' + j,
+              email: 'frank-async' + j + '@xx.cn'
+            });
+          }
+          $scope.usersTotal = 50;
+        }, 1000);
+      };
+    }
+  </script>
+</body>
+
+</html>
