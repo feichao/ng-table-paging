@@ -2,9 +2,9 @@
 
 标签（空格分隔）： table-paging
 
-[Github][1]
-
 ---
+
+[Demo][1]
 
 ### table-paging 是一个方便为 table 添加分页功能的组件。
 
@@ -104,9 +104,4 @@
 </table-paging>
 ```
 
-<iframe style="width: 100%; height: 1000px;" src="http://o8tapqn1p.bkt.clouddn.com/20170619-table-paging.demo.html"></iframe>
-
-
-    [1]: https://github.com/feichao/ng-table-paging
-
-
+  [1]: http://www.0xfc.cn/article/0/5947e5b24209cb4554f0aaeb
